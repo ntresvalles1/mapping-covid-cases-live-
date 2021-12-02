@@ -1,0 +1,130 @@
+
+---
+title: "mapping covid cases [updates daily]"
+date: "december 2, 2021"
+output:
+  pdf_document:
+    toc: no
+    df_print: paged
+---
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# Do not edit this chunk unless you know what you are doing
+knitr::opts_chunk$set(
+  echo = TRUE, message = FALSE, warning = FALSE, fig.width = 16/2, fig.height = 9/2
+)
+```
+
+```{r, echo=FALSE}
+# Load all packages here
+library(tidyverse)
+library(fivethirtyeight)
+library(leaflet)
+library(sf)
+library(maps)
+
+# USA specific data
+library(USAboundaries)
+library(tidycensus)
+library(giscoR)
+
+```
+
+
+```{r, echo = FALSE}
+# Load all data:
+US_counties <- 
+  readr::read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/live/us-counties.csv")
+
+States_capitals <- 
+  readr::read_csv("https://raw.githubusercontent.com/jasperdebie/VisInfo/master/us-state-capitals.csv")
+
+# Filter to states we want:
+Filtered_capitals <- States_capitals %>% 
+  filter(name == "Florida" | name == "Mississippi" | name == "Louisiana"|
+         name == "Georgia" | name == "Texas" | name == "Alabama" 
+         | name == "South Carolina") 
+ 
+Filtered_capitals$description[Filtered_capitals$description=="Atlanta<br>"] <- "Atlanta"
+
+Filtered_capitals_sf <- Filtered_capitals %>% 
+  st_as_sf(coords = c("longitude","latitude"), crs = 4326)
+  
+# Load maps package map object of US states:
+USA_map <-  maps::map("state", plot = FALSE, fill = TRUE)
+
+# Convert maps to sf object:
+USA_sf <- USA_map %>% 
+  st_as_sf(crs = 4326)
+
+# Filter to southern states:
+Covid_south <- US_counties %>%
+  filter(state == "Florida" | state == "Mississippi" | state == "Louisiana"|
+         state == "Georgia" | state == "Texas" | state == "Alabama" 
+         | state == "South Carolina")
+us_southern <- us_counties(states=c("Florida","Mississippi", "Louisiana", 
+                                    "Georgia", "Texas", "Alabama", "South Carolina"))
+
+# Make fips:
+us_southern$fips <- as.character(paste(us_southern$statefp, 
+                                       us_southern$countyfp,sep = ""))
+
+join_covid_south<- us_southern %>%
+  inner_join(Covid_south, by = "fips")
+
+# Produces map for southern region: 
+south_counties <- 
+  USAboundaries::us_counties(resolution = "low", 
+                             states = c("Florida","Mississippi", "Louisiana", 
+                                        "Georgia", "Texas", "Alabama", 
+                                        "South Carolina")) %>% 
+  select(-state_name)
+
+# Convert numerical var to categorical var:
+south_data <- join_covid_south %>%
+  mutate(cases_discrete = cut_number(cases, 5))
+south_data
+
+# State boundary shapefile: 
+states_boundaries <- "cb_2018_us_state_5m/" %>%
+  read_sf() %>% 
+  filter(STATEFP == "12" | STATEFP == "28" | STATEFP == "22" | 
+           STATEFP == "13" | STATEFP == "48" | STATEFP == "01" | 
+           STATEFP == "45")
+
+```
+
+
+# Q2: Introduction
+
+Our analysis focuses on the confirmed COVID-19 cases in seven of the southern states, taken from NYTimes dataset^[NYTimes, (2021). Covid-19 Data [Data set]]. These seven states are key states because according to Hematology News^[Publish date: May 12, 2020, &amp; Franki, R. (2021, August 26). States vary in vulnerability to covid-19 impact. MDedge Hematology and Oncology. Retrieved November 20, 2021, from https://www.mdedge.com/hematology-oncology/article/222125/coronavirus-updates/states-vary-vulnerability-covid-19-impact.], these states are among the top 10 states that have the most vulnerable population. The dataframe we used updates daily, and thus the data continually changes. As can be seen, most of Florida has the darker shade of red, meaning it has significantly more cases of the virus for the current date the data is showing. Furthermore, most of the cases in Florida appear to be in the counties towards the bottom of the state, which could be caused by the major cities, such as Orlando, Miami, and Tampa,^[jochenf36, (2014). US State Capitals [Data set]] being located there. 
+
+The right side of the map also appear to have heavier amounts of the darker hues, meaning the states of South Carolina, Georgia, Florida and Alabama have more confirmed cases. Another observation is that the darker shades appear adjacent to each other, which can be attributed to the virus's tendency to be extremely contagious. Being so close together, can cause more exposure and positive cases. Lastly, the west of Texas have fewer cases compared to the rest of the Southern region of the country, which may be due to the fact that those sections are occupied with significantly less population^[Texas population 2021. Texas Population 2021 (Demographics, Maps, Graphs). (n.d.). Retrieved November 20, 2021, from https://worldpopulationreview.com/states/texas-population.]. Having less of a population, means less spread of the virus. Overall, by looking at the data we conclude that the heavily densely populated areas in the Southern Region of the United States are significantly being more affected by this virus, compared to the less populated areas.
+
+
+# Q3: The map
+
+```{r, echo = FALSE}
+# Map code:
+pal <- hcl.colors(6, "OrRd", rev = TRUE, alpha = 0.7)
+
+# Plot:
+ggplot() +
+  geom_sf(data = south_counties) +
+  geom_sf(data = south_data, aes(fill = cases_discrete), size = 0.5) +
+   scale_fill_manual(values = pal, drop = FALSE) +
+  scale_fill_manual(values = pal, drop = FALSE) +
+  geom_sf(data = states_boundaries, col = "black", fill = NA) +
+  geom_sf(data = Filtered_capitals_sf, aes(col = description), size = 2) + 
+  scale_color_manual(values=c("#FFF99B","#000000", "#AEFF9B", "#61AE72","#9BFDFF","#FFC0FE","#3399FF")) +
+  labs(fill = "COVID-19 Cases\nFor Current Day", 
+       title = "COVID-19 Cases in the South Region of the US", 
+       col = "Capital City") +
+  theme(panel.background = element_rect(fill = "aliceblue"))
+
+```
+
+
+# Additional Analysis
+
+We used a shapefile to outline the boundaries of the seven specific states we decided to focus on^[Bureau, U. S. C. (2021, October 8). Cartographic boundary files - shapefile. Census.gov. Retrieved November 25, 2021, from https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html.]. 

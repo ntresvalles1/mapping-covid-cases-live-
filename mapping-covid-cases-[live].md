@@ -3,7 +3,7 @@ Mapping Covid Cases
 
 -   Authors: Nicole Tresvalles & Yangyang Lyu
 -   Important note: The dataset we used updates daily, and thus the
-    analysis might be inconsistent with what is viewed. However, by
+    analysis might be inconsistent with what is on the map However, by
     looking at the data every day for a month, we noticed that most of
     the concentration of cases seem to be consistent.
 

@@ -1,0 +1,124 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={mapping covid cases {[}updates daily{]}},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{mapping covid cases {[}updates daily{]}}
+\author{}
+\date{\vspace{-2.5em}december 2, 2021}
+
+\begin{document}
+\maketitle
+
+\hypertarget{q2-introduction}{%
+\section{Q2: Introduction}\label{q2-introduction}}
+
+Our analysis focuses on the confirmed COVID-19 cases in seven of the
+southern states, taken from NYTimes dataset\footnote{NYTimes, (2021).
+  Covid-19 Data {[}Data set{]}}. These seven states are key states
+because according to Hematology News\footnote{Publish date: May 12,
+  2020, \& Franki, R. (2021, August 26). States vary in vulnerability to
+  covid-19 impact. MDedge Hematology and Oncology. Retrieved November
+  20, 2021, from
+  \url{https://www.mdedge.com/hematology-oncology/article/222125/coronavirus-updates/states-vary-vulnerability-covid-19-impact}.},
+these states are among the top 10 states that have the most vulnerable
+population. The dataframe we used updates daily, and thus the data
+continually changes. As can be seen, most of Florida has the darker
+shade of red, meaning it has significantly more cases of the virus for
+the current date the data is showing. Furthermore, most of the cases in
+Florida appear to be in the counties towards the bottom of the state,
+which could be caused by the major cities, such as Orlando, Miami, and
+Tampa,\footnote{jochenf36, (2014). US State Capitals {[}Data set{]}}
+being located there.
+
+The right side of the map also appear to have heavier amounts of the
+darker hues, meaning the states of South Carolina, Georgia, Florida and
+Alabama have more confirmed cases. Another observation is that the
+darker shades appear adjacent to each other, which can be attributed to
+the virus's tendency to be extremely contagious. Being so close
+together, can cause more exposure and positive cases. Lastly, the west
+of Texas have fewer cases compared to the rest of the Southern region of
+the country, which may be due to the fact that those sections are
+occupied with significantly less population\footnote{Texas population
+  2021. Texas Population 2021 (Demographics, Maps, Graphs). (n.d.).
+  Retrieved November 20, 2021, from
+  \url{https://worldpopulationreview.com/states/texas-population}.}.
+Having less of a population, means less spread of the virus. Overall, by
+looking at the data we conclude that the heavily densely populated areas
+in the Southern Region of the United States are significantly being more
+affected by this virus, compared to the less populated areas.
+
+\hypertarget{q3-the-map}{%
+\section{Q3: The map}\label{q3-the-map}}
+
+\includegraphics{mapping-covid-cases-{[}live{]}_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+\hypertarget{additional-analysis}{%
+\section{Additional Analysis}\label{additional-analysis}}
+
+We used a shapefile to outline the boundaries of the seven specific
+states we decided to focus on\footnote{Bureau, U. S. C. (2021, October
+  8). Cartographic boundary files - shapefile. Census.gov. Retrieved
+  November 25, 2021, from
+  \url{https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html}.}.
+
+\end{document}

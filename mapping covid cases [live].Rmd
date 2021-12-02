@@ -1,10 +1,10 @@
 
 ---
-title: "Mapping Covid Cases [Updates Daily]"
+title: "Mapping Covid Cases"
 output: github_document
 ---
-
 Authors: Nicole Tresvalles & Yangyang Lyu
+Important note: The dataset we used updates daily, and thus the analysis might be inconsistent with what is viewed. However, by looking at the data every day for a month, we noticed that most of the concentration of cases seem to be consistent. 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, include=FALSE}
 # Do not edit this chunk unless you know what you are doing
 knitr::opts_chunk$set(
